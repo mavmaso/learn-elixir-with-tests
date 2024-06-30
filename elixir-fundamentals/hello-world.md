@@ -348,7 +348,7 @@ By now you should have some understanding of:
 * Declaring variables
 * How to write good and readable tests in a project
 
-Let's go over the cycle again
+Remember the cycle
 
 * Write a test
 * Write the code
