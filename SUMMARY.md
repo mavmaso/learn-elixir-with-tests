@@ -8,11 +8,11 @@
 
 ## TESTING FUNDAMENTALS
 
-* [Page 1](testing-fundamentals/page-1.md)
+* [WIP](testing-fundamentals/wip.md)
 
 ## BUILD AN API SERVER
 
-* [Page 2](build-an-api-server/page-2.md)
+* [WIP](build-an-api-server/wip.md)
 
 ## META
 

@@ -3,7 +3,7 @@
 It is traditional for your first program in a new language to be [Hello, World](https://en.m.wikipedia.org/wiki/%22Hello,\_World!%22\_program).
 
 * Create a folder wherever you like
-* create a new project with: `mix new hello`&#x20;
+* create a new project with: `mix new foo`&#x20;
 
 Copy
 
@@ -28,6 +28,16 @@ Run "mix help" for more commands.
 ```
 
 To run it, type `cd foo/ && mix test`.
+
+```
+Compiling 1 file (.ex)
+Generated foo app
+Running ExUnit with seed: 349267, max_cases: 20
+
+..
+Finished in 0.01 seconds (0.00s async, 0.01s sync)
+1 doctest, 1 test, 0 failures
+```
 
 ### How it works <a href="#how-it-works" id="how-it-works"></a>
 
@@ -256,19 +266,74 @@ end
 ```
 ````
 
-#### Discipline <a href="#discipline" id="discipline"></a>
+Let's do our last test, this time we're going to have a dynamic function that says hello from someone and changes the idiom.
 
-Let's go over the cycle again
+````
+```elixir
+defmodule FooTest do
+  use ExUnit.Case
 
-* Write a test
-* Make the compiler pass
-* Run the test, see that it fails and check the error message is meaningful
-* Write enough code to make the test pass
-* Refactor
+  import ExUnit.CaptureIO
 
-On the face of it this may seem tedious but sticking to the feedback loop is important.
+  describe "hello/2" do
+    test "prints a message with a name" do
+      name = "Marcos"
+      assert capture_io(fn -> Foo.hello(name) end) =~ "Hello, world! from #{name}"
+    end
 
-Not only does it ensure that you have _relevant tests_, it helps ensure _you design good software_ by refactoring with the safety of tests.
+    test "prints a message with a name in Portuguese" do
+      name = "Marcos"
+      assert capture_io(fn -> Foo.hello(name, :pt) end) =~ "Olá! do #{name}"
+    end
+  end
+end
+
+```
+````
+
+Notice that we've now changed the 'describes' to hello/2 but we're still only going to send 1 argument in the first case, or first 'test' as you see fit, because we're going to use English as the default and we've made a new case for Portuguese. If we run:&#x20;
+
+```
+  1) test hello/2 prints a message with a name in Portuguese (FooTest)
+     test/foo_test.exs:14
+     ** (UndefinedFunctionError) function Foo.hello/2 is undefined or private. Did you mean:
+
+           * hello/1
+     
+     code: assert capture_io(fn -> Foo.hello(name, :pt) end) =~ "Olá! de #{name}"
+     stacktrace:
+       (foo 0.1.0) Foo.hello("Marcos", :pt)
+       (ex_unit 1.17.0) lib/ex_unit/capture_io.ex:315: ExUnit.CaptureIO.do_capture_gl/2
+       (ex_unit 1.17.0) lib/ex_unit/capture_io.ex:273: ExUnit.CaptureIO.do_with_io/3
+       (ex_unit 1.17.0) lib/ex_unit/capture_io.ex:142: ExUnit.CaptureIO.capture_io/1
+       test/foo_test.exs:16: (test)
+```
+
+Remember, we can have more than one function with the same name and we can still use it as a control flow to decide how to process, so we will have two definitions of hello:
+
+````
+```elixir
+defmodule Foo do
+  @moduledoc """
+  Documentation for `Foo`.
+  """
+
+  @doc """
+  Hello world.
+  """
+  def hello(name) do
+    IO.puts("Hello, world! from #{name}")
+  end
+
+  def hello(name, :pt) do
+    IO.puts("Olá! do #{name}")
+  end
+end
+
+```
+````
+
+If you come from another language, think of it as an 'if', but I'll explain it more in the flow control and pattern match chapters.
 
 ### Wrapping up <a href="#wrapping-up" id="wrapping-up"></a>
 
@@ -281,17 +346,18 @@ By now you should have some understanding of:
 * Writing tests
 * Declaring functions, with arguments/arity
 * Declaring variables
+* How to write good and readable tests in a project
 
-#### The TDD process and _why_ the steps are important <a href="#the-tdd-process-and-why-the-steps-are-important" id="the-tdd-process-and-why-the-steps-are-important"></a>
+Let's go over the cycle again
 
-* _Write a failing test and see it fail_ so we know we have written a _relevant_ test for our requirements and seen that it produces an _easy-to-understand description of the failure_
-* Writing the smallest amount of code to make it pass so we know we have working software
-* _Then_ refactor, backed with the safety of our tests to ensure we have well-crafted code that is easy to work with
+* Write a test
+* Write the code
+* Run the test, see that it fails and check the error message&#x20;
+* Write enough code to make the test pass, be clear
+* Refactor
+
+At first glance, this might seem tedious, but adhering to the feedback loop is crucial. It not only ensures you have relevant tests but also helps you design better software by allowing for safe refactoring with the support of those tests.
 
 In our case, we've gone from `hello/0` to `hello/1` and then to `hello/2` in small, easy-to-understand steps.
 
 Of course, this is trivial compared to "real-world" software, but the principles still stand. TDD is a skill that needs practice to develop, but by breaking problems down into smaller components that you can test, you will have a much easier time writing software.
-
-\
-
-
