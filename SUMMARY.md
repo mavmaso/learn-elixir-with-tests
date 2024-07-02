@@ -5,6 +5,7 @@
 ## ELIXIR FUNDAMENTALS
 
 * [Hello, World](elixir-fundamentals/hello-world.md)
+* [Basic Types](elixir-fundamentals/basic-types.md)
 
 ## TESTING FUNDAMENTALS
 
