@@ -1,6 +1,6 @@
 # Basic Types
 
-&#x20;Elixir ...
+&#x20;First basic type: String ...
 
 ### Write the test first <a href="#write-the-test-first" id="write-the-test-first"></a>
 
@@ -8,7 +8,6 @@
 
 * Create a new folder and a file name `basic.exs`
 
-````elixir
 ```elixir
 defmodule Basic do
   
@@ -26,7 +25,6 @@ defmodule BasicTest do
   end
 end
 ```
-````
 
 ### Try to run the test <a href="#try-to-run-the-test" id="try-to-run-the-test"></a>
 
