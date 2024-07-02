@@ -340,7 +340,6 @@ By now you should have some understanding of:
 
 #### Some of Elixir's syntax around <a href="#some-of-gos-syntax-around" id="some-of-gos-syntax-around"></a>
 
-* Writing tests
 * Declaring functions, with arguments/arity
 * Declaring variables
 * How to write good and readable tests in a project
