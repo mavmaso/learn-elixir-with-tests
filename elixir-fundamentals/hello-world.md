@@ -46,7 +46,6 @@ Now about what we've just created and tested here, the mix created a project wit
 
 In the Foo module:
 
-````
 ```elixir
 defmodule Foo do
   @moduledoc """
@@ -66,15 +65,12 @@ defmodule Foo do
     :world
   end
 end
-
 ```
-````
 
 Here, we have a `hello/0` function, meaning it calls hello and requires zero arguments. In Elixir, we refer to this as a zero arity function, hence `hello/0`. Additionally, it includes documentation and a `doc test`—a straightforward type of test embedded in the documentation that can be run alongside other tests. This practice ensures that the documentation is both practical and functional. However, our focus will not be on this, as it is not related to TDD.
 
 As for the test file, it is "mirrored" in the test folder with the suffix \_test.exs and is therefore a script.
 
-````
 ```elixir
 defmodule FooTest do
   use ExUnit.Case
@@ -84,9 +80,7 @@ defmodule FooTest do
     assert Foo.hello() == :world
   end
 end
-
 ```
-````
 
 The test ensures that the Foo module contains a hello/0 function that returns :world. In Elixir, :world is an atom, a unique type used for internal "communication," essentially an alternative to strings. Elixir is easy to test because it includes several built-in testing tools and adheres to two fundamental rules:
 
@@ -102,7 +96,6 @@ Writing a test is just like writing a function, with a few rules
 
 But testing isn't just about functions that ensure that other functions are working as intended, it's about documentation and architecture. So we have to improve what we already have by using BDD when writing them.
 
-````
 ```elixir
 defmodule FooTest do
   use ExUnit.Case
@@ -114,7 +107,6 @@ defmodule FooTest do
   end
 end
 ```
-````
 
 BDD is a broad topic, so we'll take what we need here, which is to use the describe next to the test name to create a test suite that is more descriptive and follows the BDD idea, after all the test checks behaviour and not just the return and effects. Then run the test again, only now with the trace option: `mix test --trace`
 
@@ -135,7 +127,6 @@ Finished in 0.01 seconds (0.00s async, 0.01s sync)
 
 Whenever I discuss Test-Driven Development (TDD), which involves writing tests first and then developing the software based on those tests, the primary issue people mention is their uncertainty about how to test or what to test. Even with a simple "Hello, World!" example, this problem arises. Typically, such a function outputs to the terminal instead of returning an atom, as we are doing here. To test and capture this output, we will use `ExUnit.CaptureIO`.
 
-````
 ```elixir
 defmodule FooTest do
   use ExUnit.Case
@@ -148,9 +139,7 @@ defmodule FooTest do
     end
   end
 end
-
 ```
-````
 
 First let's read and understand the new architecture, now the `hello/0` function needs to print "Hello, world!" when called, and we don't care about the return of the function itself. Detail for the `=~` operator: This operator is used to check if a string contains a specific substring, even when the string is lengthy or includes extraneous characters.
 
@@ -176,7 +165,6 @@ Finished in 0.01 seconds (0.00s async, 0.01s sync)
 
 We replace :world with `IO.puts("Hello, world!")`.
 
-````
 ```elixir
 defmodule Foo do
   @moduledoc """
@@ -190,9 +178,7 @@ defmodule Foo do
     IO.puts("Hello, world!")
   end
 end
-
 ```
-````
 
 We run the test again:
 
@@ -206,7 +192,6 @@ Finished in 0.02 seconds (0.00s async, 0.02s sync)
 
 We're still keeping things simple, but now let's add some complexity by personalizing the `hello/0` function with someone's name. To achieve this, we'll use string interpolation, which allows us to embed the value of a variable within a string. In Elixir, always use double quotes `"` to start and end a string, and use `#{}` to interpolate variables or values within the string.
 
-````
 ```elixir
 defmodule FooTest do
   use ExUnit.Case
@@ -221,7 +206,6 @@ defmodule FooTest do
   end
 end
 ```
-````
 
 If we run the test:&#x20;
 
@@ -246,7 +230,6 @@ Finished in 0.02 seconds (0.00s async, 0.02s sync)
 
 We reach the core of TDD: creating demand, in this case, errors with the tests, to solve them. Here, we encounter our first issue: the `hello/1` function doesn't exist.
 
-````
 ```elixir
 defmodule Foo do
   @moduledoc """
@@ -261,11 +244,9 @@ defmodule Foo do
   end
 end
 ```
-````
 
 Let's do our last test, this time we're going to have a dynamic function that says hello from someone and changes the idiom.
 
-````
 ```elixir
 defmodule FooTest do
   use ExUnit.Case
@@ -284,9 +265,7 @@ defmodule FooTest do
     end
   end
 end
-
 ```
-````
 
 Notice that we've now changed the 'describes' to hello/2 but we're still only going to send 1 argument in the first case, or first 'test' as you see fit, because we're going to use English as the default and we've made a new case for Portuguese. If we run:&#x20;
 
@@ -308,7 +287,6 @@ Notice that we've now changed the 'describes' to hello/2 but we're still only go
 
 Remember, we can have more than one function with the same name and we can still use it as a control flow to decide how to process, so we will have two definitions of hello:
 
-````
 ```elixir
 defmodule Foo do
   @moduledoc """
@@ -326,9 +304,7 @@ defmodule Foo do
     IO.puts("Olá! do #{name}")
   end
 end
-
 ```
-````
 
 If you come from another language, think of it as an 'if', but I'll explain it more in the flow control and pattern match chapters.
 
