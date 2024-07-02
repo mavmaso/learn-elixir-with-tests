@@ -2,10 +2,7 @@
 
 It is traditional for your first program in a new language to be [Hello, World](https://en.m.wikipedia.org/wiki/%22Hello,\_World!%22\_program).
 
-* Create a folder wherever you like
-* create a new project with: `mix new foo`&#x20;
-
-Copy
+* Create a new project with: `mix new foo`&#x20;
 
 ```
 * creating README.md
@@ -43,7 +40,7 @@ Finished in 0.01 seconds (0.00s async, 0.01s sync)
 
 First, for more information about how mix and project setup works, [here](https://elixirschool.com/en/lessons/basics/mix).
 
-But basically the elixir tests are made for projects, we can make simple scripts with files ending in `.exs` and run them with the command elixir `file_name.exs`, and we also have [mix-install,](https://tmr08c.github.io/2021/05/using-mix-install/) to help with more complex scripts. But our focus here is on creating app/software with TDD, so we'll go straight to projects and use mix for that.
+But basically the elixir tests are made for projects, we can make simple scripts with files ending in `.exs` and run them with the command `elixir file_name.exs`, and we also have [mix-install,](https://tmr08c.github.io/2021/05/using-mix-install/) to help with more complex scripts. But our focus here is on creating app/software with TDD, so we'll go straight to projects and use mix for that.
 
 Now about what we've just created and tested here, the mix created a project with `lib/foo.ex` and `test/foo_test.ex`.
 
