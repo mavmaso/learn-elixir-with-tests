@@ -64,14 +64,41 @@ However, for the test, we want it to be formatted as `"Erica"`. Visually, we can
 
 Now, let's write the code to achieve this:
 
-```
-// Some code
+```elixir
+defmodule Basic do
+  def format(name) do
+   name
+  end
+end
+
+ExUnit.start()
+
+defmodule BasicTest do
+  use ExUnit.Case
+
+  test "format string" do
+    name = :erica
+
+    assert Basic.format(name) == "Erica"
+  end
+end
 ```
 
 If we run it again with: `elixir basic.exs`
 
 ```
-// Some code
+ 1) test format string (BasicTest)
+     basic.exs:12
+     Assertion with == failed
+     code:  assert Basic.format(name) == "Erica"
+     left:  :erica
+     right: "Erica"
+     stacktrace:
+       basic.exs:15: (test)
+
+
+Finished in 0.03 seconds (0.03s on load, 0.00s async, 0.00s sync)
+1 test, 1 failure
 ```
 
 A victory! We've already fixed the initial error.
