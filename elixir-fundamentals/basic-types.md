@@ -1,9 +1,5 @@
 # Basic Types
 
-&#x20;First basic type: String ...
-
-### Write the test first <a href="#write-the-test-first" id="write-the-test-first"></a>
-
 Elixir have few types:
 
 * Atom
@@ -17,6 +13,8 @@ Elixir have few types:
 * PID, Datatime, etc
 
 &#x20;The last two can be considered somewhat more advanced. Therefore, in today’s lesson, we will focus on Atoms, Strings, and Numbers.
+
+### Write the test first <a href="#write-the-test-first" id="write-the-test-first"></a>
 
 &#x20;This time, let's use a script to learn about type.
 
