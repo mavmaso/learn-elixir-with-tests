@@ -4,6 +4,20 @@
 
 ### Write the test first <a href="#write-the-test-first" id="write-the-test-first"></a>
 
+Elixir have few types:
+
+* Atom
+* String & Charlist
+* Numbers
+* List
+* Tuples
+* Maps
+* Struct
+* Keyword List
+* PID, Datatime, etc
+
+&#x20;The last two can be considered somewhat more advanced. Therefore, in today’s lesson, we will focus on Atoms, Strings, and Numbers.
+
 &#x20;This time, let's use a script to learn about type.
 
 * Create a new folder and a file name `basic.exs`
