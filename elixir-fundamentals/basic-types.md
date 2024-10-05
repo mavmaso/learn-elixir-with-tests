@@ -105,7 +105,47 @@ A victory! We've already fixed the initial error.
 
 ### Write enough code to make it pass <a href="#write-enough-code-to-make-it-pass" id="write-enough-code-to-make-it-pass"></a>
 
+Para solucionar isso iremos usar o |>, pipe operator, para que possamos encadear o resultados das funçoes e transformar o atom na string e  deixar ele com a primeira letra em caixa alta.
+
+```elixir
+defmodule Basic do
+  def format(name) do
+   name
+   |> Atom.to_string()
+   |> String.capitalize()
+  end
+end
+
+ExUnit.start()
+
+defmodule BasicTest do
+  use ExUnit.Case
+
+  test "format string" do
+    name = :erica
+
+    assert Basic.format(name) == "Erica"
+  end
+end
+```
+
+E ao rodar o teste de novo:  : `elixir basic.exs`
+
+```
+.
+Finished in 0.02 seconds (0.02s on load, 0.00s async, 0.00s sync)
+1 test, 0 failures
+```
+
 ### Refactor <a href="#refactor" id="refactor"></a>
+
+Agora vamos usar outros dois tipos muito bem comum: numeros e booleans.&#x20;
+
+```
+// Some code
+```
+
+
 
 ### Repeat for new requirements <a href="#repeat-for-new-requirements" id="repeat-for-new-requirements"></a>
 
