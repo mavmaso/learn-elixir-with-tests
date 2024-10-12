@@ -30,7 +30,7 @@ ExUnit.start()
 defmodule BasicTest do
   use ExUnit.Case
 
-  test "format string" do
+  test "format to string" do
     name = :erica
 
     assert Basic.format(name) == "Erica"
@@ -76,7 +76,7 @@ ExUnit.start()
 defmodule BasicTest do
   use ExUnit.Case
 
-  test "format string" do
+  test "format to string" do
     name = :erica
 
     assert Basic.format(name) == "Erica"
@@ -121,7 +121,7 @@ ExUnit.start()
 defmodule BasicTest do
   use ExUnit.Case
 
-  test "format string" do
+  test "format to string" do
     name = :erica
 
     assert Basic.format(name) == "Erica"
@@ -141,12 +141,56 @@ Finished in 0.02 seconds (0.02s on load, 0.00s async, 0.00s sync)
 
 Agora vamos usar outros dois tipos muito bem comum: numeros e booleans.&#x20;
 
-```
-// Some code
+```elixir
+defmodule BasicTest do
+  use ExUnit.Case
+
+  test "format string" do
+    name = :erica
+
+    assert Basic.format(name) == "Erica"
+  end
+
+  test "check if sum is even" do
+    a = 1
+    b = 3
+
+    assert Basic.result_even?(a, b)
+    assert Basic.result_even?(a, b + 1) == false
+  end
+end
 ```
 
-
+Repare que a funçao result\_pair?  termina com ? que sinaliza que ela devolve um boolen e logo o assert já recebera um true ja na segunda linha colocamos uma comparaçao com false porem poderiamos ter usado refuse.
 
 ### Repeat for new requirements <a href="#repeat-for-new-requirements" id="repeat-for-new-requirements"></a>
 
+a
+
+```elixir
+defmodule Basic do
+  def format(name) do
+   name
+   |> Atom.to_string()
+   |> String.capitalize()
+  end
+
+  def result_even?(a, b) do
+    rem(a + b, 2) == 0
+  end
+end
+```
+
+Ao rodar temos:
+
+```
+..
+Finished in 0.03 seconds (0.03s on load, 0.00s async, 0.00s sync)
+2 tests, 0 failures
+```
+
 ### Wrapping up <a href="#wrapping-up" id="wrapping-up"></a>
+
+E assim
+
+...
