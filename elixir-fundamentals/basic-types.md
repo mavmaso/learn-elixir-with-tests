@@ -38,6 +38,8 @@ defmodule BasicTest do
 end
 ```
 
+We expect a function `format/1` to take the atom `:erica` and return the string `"Erica"`.
+
 ### Try to run the test <a href="#try-to-run-the-test" id="try-to-run-the-test"></a>
 
 In this case, to run the test: `elixir basic.exs`
@@ -58,11 +60,30 @@ Finished in 0.07 seconds (0.06s on load, 0.00s async, 0.01s sync)
 
 ### Write the minimal amount of code for the test to run and check the failing test output <a href="#write-the-minimal-amount-of-code-for-the-test-to-run-and-check-the-failing-test-output" id="write-the-minimal-amount-of-code-for-the-test-to-run-and-check-the-failing-test-output"></a>
 
-Let's analyze what we have here: `name = :erica`, a variable `name` with the value as an atom. How do we know this? In Elixir, the type can be identified by its "shape," and in this case, since it starts with a colon, we can tell that it's an atom, which is a very particular type in Elixir. It acts similarly to enums in other languages.
+Let’s analyze what we have so far.
 
-However, for the test, we want it to be formatted as `"Erica"`. Visually, we can see that it’s a string since it’s enclosed in double quotes. If it were in single quotes, it would be a charlist, but we rarely use that.
+We defined a variable:
 
-Now, let's write the code to achieve this:
+```elixir
+name = :erica
+```
+
+In Elixir, `:erica` is an **atom**. We can tell this by its shape: it starts with a colon (`:`). This is how atoms are written in Elixir.\
+Atoms are constants whose value is their own name, similar, but not the same, to enums in other languages.
+
+Now look at the test:
+
+```elixir
+assert Basic.format(name) == "Erica"
+```
+
+The expected output is `"Erica"`, a **string** — we know that because it's surrounded by **double quotes**.\
+In Elixir, double quotes define **strings**, while single quotes define **charlists**, which are rarely used unless you're working with older Erlang-style APIs.
+
+So we’re asking Elixir to convert the atom `:erica` into the string `"Erica"`.
+
+Before we can fix the test, we need to make sure it actually runs.\
+Let's define a `format/1` function that just returns the input, without doing any transformation:
 
 ```elixir
 defmodule Basic do
@@ -86,7 +107,7 @@ end
 
 If we run it again with: `elixir basic.exs`
 
-```
+```bash
  1) test format string (BasicTest)
      basic.exs:12
      Assertion with == failed
@@ -101,18 +122,33 @@ Finished in 0.03 seconds (0.03s on load, 0.00s async, 0.00s sync)
 1 test, 1 failure
 ```
 
-A victory! We've already fixed the initial error.
+This is good news! The test **compiles** and **runs**, but it fails — just as we want at this stage.
+
+The error message tells us:
+
+* The **left** value (`:erica`) is the result of calling `Basic.format(name)`
+* The **right** value (`"Erica"`) is what the test expected
+
+We’ve now reached the **red** step of the TDD cycle: we wrote a failing test that clearly expresses the behavior we want.
+
+Next, we’ll make it pass.
 
 ### Write enough code to make it pass <a href="#write-enough-code-to-make-it-pass" id="write-enough-code-to-make-it-pass"></a>
 
-Para solucionar isso iremos usar o |>, pipe operator, para que possamos encadear o resultados das funçoes e transformar o atom na string e  deixar ele com a primeira letra em caixa alta.
+Let’s implement just enough code to make the test pass.
+
+We need to:
+
+* Convert the atom to a string (`Atom.to_string/1`)
+* Capitalize the first letter (`String.capitalize/1`)
+
+
 
 ```elixir
 defmodule Basic do
   def format(name) do
-   name
-   |> Atom.to_string()
-   |> String.capitalize()
+    stringify = Atom.to_string(name)
+    String.capitalize(stringify)
   end
 end
 
@@ -129,17 +165,68 @@ defmodule BasicTest do
 end
 ```
 
-E ao rodar o teste de novo:  : `elixir basic.exs`
+Now, run the test again: `elixir basic.exs`
 
-```
+```bash
 .
 Finished in 0.02 seconds (0.02s on load, 0.00s async, 0.00s sync)
 1 test, 0 failures
 ```
 
+Green!
+
 ### Refactor <a href="#refactor" id="refactor"></a>
 
-Agora vamos usar outros dois tipos muito bem comum: numeros e booleans.&#x20;
+Now that the test passes, let’s improve the code.
+
+We want to transform an atom like `:erica` into a string `"Erica"`. We can do that in two steps:
+
+1. Convert the atom to a string using `Atom.to_string/1`, which would return `"erica"`.
+2. Capitalize the first letter using `String.capitalize/1`, which would return `"Erica"`.
+
+We could write this like a sequence of function calls:
+
+```elixir
+String.capitalize(Atom.to_string(name))
+```
+
+That works just fine, but Elixir offers a more **readable** and **idiomatic** way to chain functions using the **pipe operator (`|>`)**.
+
+The pipe operator (`|>`) takes the result of the expression on its left and **passes it as the first argument** to the function on its right.
+
+So this:
+
+```elixir
+defmodule Basic do
+  def format(name) do
+   name
+   |> Atom.to_string()
+   |> String.capitalize()
+  end
+end
+```
+
+It’s a bit like saying:
+
+* Take `name` → pass it to `Atom.to_string/1`
+* Take the result of that → pass it to `String.capitalize/1`
+
+This makes the data **flow** from top to bottom in a clean and readable way. In Elixir, this style is very common and encouraged — especially when you’re transforming data step by step.
+
+```bash
+.
+Finished in 0.02 seconds
+1 test, 0 failures
+```
+
+✅ Still green! And now much easier to read.
+
+### Repeat for new requirements <a href="#repeat-for-new-requirements" id="repeat-for-new-requirements"></a>
+
+Now let’s introduce another basic type: numbers.\
+We'll write a function to check if the result of adding two numbers is even.
+
+Update the test:
 
 ```elixir
 defmodule BasicTest do
@@ -161,11 +248,13 @@ defmodule BasicTest do
 end
 ```
 
-Repare que a funçao result\_pair?  termina com ? que sinaliza que ela devolve um boolen e logo o assert já recebera um true ja na segunda linha colocamos uma comparaçao com false porem poderiamos ter usado refuse.
+💡 In Elixir, functions that return booleans are usually named with a `?` suffix.
 
-### Repeat for new requirements <a href="#repeat-for-new-requirements" id="repeat-for-new-requirements"></a>
+```
+** (UndefinedFunctionError) function Basic.result_even?/2 is undefined
+```
 
-a
+Let’s fix that:
 
 ```elixir
 defmodule Basic do
@@ -181,9 +270,9 @@ defmodule Basic do
 end
 ```
 
-Ao rodar temos:
+Run the test:
 
-```
+```bash
 ..
 Finished in 0.03 seconds (0.03s on load, 0.00s async, 0.00s sync)
 2 tests, 0 failures
@@ -191,6 +280,18 @@ Finished in 0.03 seconds (0.03s on load, 0.00s async, 0.00s sync)
 
 ### Wrapping up <a href="#wrapping-up" id="wrapping-up"></a>
 
-E assim
+In this chapter, we:
+
+* Explored **atoms** (`:erica`)
+* Converted them into **strings**
+* Capitalized strings using `String.capitalize/1`
+* Introduced **numbers**
+* Performed a numeric operation (`a + b`) and used `rem/2` to check for evenness
+* Used boolean-returning functions with the `?` naming convention
+* Practiced chaining function calls with the **pipe operator** (`|>`)
+
+All of this was done using test-driven development: writing the test first, watching it fail, making it pass, and expanding requirements.
+
+In the next chapter, we’ll dive into Elixir's **collections**: **lists**, **keyword list**, **tuples**, and **maps** and **structs**.
 
 ...
