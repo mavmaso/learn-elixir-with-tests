@@ -27,14 +27,12 @@ ExUnit.start()
 defmodule AdvancedTest do
   use ExUnit.Case
 
-  test "checks if a list contains a valid integer" do
-    values = [1, 2, 3, 4]
-
-    assert Advanced.contains(values, 2) == {:ok, 2}
-    assert Advanced.contains(values, 10) == {:error, :not_found}
-    assert Advanced.contains(values, -1) == {:error, :unprocessed}
-    assert Advanced.contains(values, nil) == {:error, :unprocessed}
-    assert Advanced.contains(values, "3") == {:error, :unprocessed}
+  test "checks if the number is in the list" do
+    assert Advanced.contains(2) == {:ok, 2}
+    assert Advanced.contains(10) == {:error, :not_found}
+    assert Advanced.contains(-1) == {:error, :unprocessed}
+    assert Advanced.contains(nil) == {:error, :unprocessed}
+    assert Advanced.contains("3") == {:error, :unprocessed}
   end
 end
 
@@ -51,7 +49,7 @@ elixir advanced.exs
 You’ll get an error like:
 
 ```bash
-** (UndefinedFunctionError) function Advanced.contains?/2 is undefined
+** (UndefinedFunctionError) function Advanced.contains/2 is undefined or private
 ```
 
 Perfect! Time to implement it.
@@ -62,9 +60,13 @@ Let’s define the function:
 
 ```elixir
 defmodule Advanced do
-  def contains(_list, _value), do: raise "not implemented yet"
+  @values [1, 2, 3, 4]
+
+  def contains(_value), do: raise "not implemented yet"
 end
 ```
+
+WIP - RAISE  and @var
 
 Run it again:
 
@@ -83,7 +85,41 @@ This confirms our function is being invoked.
 
 ### Write enough code to make it pass <a href="#write-enough-code-to-make-it-pass" id="write-enough-code-to-make-it-pass"></a>
 
-Now let’s write a working version that satisfies all tests. We’ll use **function pattern matching.**
+We can use f**unction pattern matching together with guard clauses:**
+
+```elixir
+defmodule Advanced do
+  @values [1, 2, 3, 4]
+
+  def contains(value) when not is_integer(value) or value <= 0, do: {:error, :unprocessed}
+
+  def contains(value) when value in @values, do: {:ok, value}
+
+  def contains(_value), do: {:error, :not_found}
+end
+```
+
+But we can do even better.
+
+### Refactor <a href="#refactor" id="refactor"></a>
+
+Now let’s rewrite a working version that is more elegant and functional. This time, that can check any list.
+
+```elixir
+defmodule AdvancedTest do
+  use ExUnit.Case
+
+  test "checks if a list contains a valid integer" do
+    values = [1, 2, 3, 4]
+
+    assert Advanced.contains(values, 2) == {:ok, 2}
+    assert Advanced.contains(values, 10) == {:error, :not_found}
+    assert Advanced.contains(values, -1) == {:error, :unprocessed}
+    assert Advanced.contains(values, nil) == {:error, :unprocessed}
+    assert Advanced.contains(values, "3") == {:error, :unprocessed}
+  end
+end
+```
 
 ```elixir
 defmodule Advanced do
@@ -115,12 +151,6 @@ Finished in 0.03 seconds
 
 Success! 🎉
 
-But we can do even better.
-
-### Refactor <a href="#refactor" id="refactor"></a>
-
-WIP
-
 ### Repeat for new requirements <a href="#repeat-for-new-requirements" id="repeat-for-new-requirements"></a>
 
 Now we want to **return a struct** instead of just a tuple.
@@ -134,7 +164,7 @@ Let’s create a struct:
 
 ```elixir
 defmodule Result do
-  defstruct given: nil, found?: false, error_code: nil
+  defstruct given: nil, found?: false, error_code: nil  
 end
 ```
 
@@ -147,11 +177,11 @@ defmodule AdvancedTest do
   test "returns a Result struct" do
     values = [1, 2, 3, 4]
 
-    assert %Result{given: 2, found?: true} = Advanced.contains(values, 2)
-    assert %Result{given: 10, error_code: :not_found} = Advanced.contains(values, 10)
-    assert %Result{given: -1, error_code: :unprocessed} = Advanced.contains(values, -1)
-    assert %Result{given: nil, error_code: :unprocessed} = Advanced.contains(values, nil)
-    assert %Result{given: "3", error_code: :unprocessed} = Advanced.contains(values, "3")
+    assert %Advanced.Result{given: 2, found?: true} = Advanced.contains(values, 2)
+    assert %Advanced.Result{given: 10, found?: false} = Advanced.contains(values, 10)
+    assert %Advanced.Result{given: -1, error_code: :unprocessed} = Advanced.contains(values, -1)
+    assert %Advanced.Result{given: nil, error_code: :unprocessed} = Advanced.contains(values, nil)
+    assert %Advanced.Result{given: "3", error_code: :unprocessed} = Advanced.contains(values, "3")
   end
 end
 ```
@@ -185,11 +215,15 @@ Now let’s update the implementation to match this new shape.
 
 ```elixir
 defmodule Advanced do
-  def find(_, value) when not is_integer(value) or value <= 0 do
-    %Result{given: value, found?: false}
+  defmodule Result do
+    defstruct given: nil, found?: false, error_code: nil
   end
 
-  def find(list, value) do
+  def contains(_, value) when not is_integer(value) or value <= 0 do
+    %Result{given: value, found?: false, error_code: :unprocessed}
+  end
+
+  def contains(list, value) do
     %Result{given: value, found?: Enum.member?(list, value)}
   end
 end
